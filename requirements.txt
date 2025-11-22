@@ -1,5 +1,5 @@
-streamlit==1.28.0
-alpaca-py==0.16.0
-plotly==5.17.0
-pandas==2.1.0
-numpy==1.24.0
+streamlit
+alpaca-py
+plotly
+pandas
+numpy
