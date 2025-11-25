@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 from alpaca.trading.client import TradingClient
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import time
 import numpy as np
 
@@ -369,15 +369,14 @@ else:
 # ═══════════════════════════════════════════════════════════════
 # TRADING ACTIVITY
 # ═══════════════════════════════════════════════════════════════
-
 st.subheader("Trading Activity")
 
 if recent_orders:
     filled_orders = [o for o in recent_orders if o.status == 'filled']
     
-    last_7_days = datetime.now() - timedelta(days=7)
+    last_7_days = datetime.now(timezone.utc) - timedelta(days=7)  # <-- timezone-aware now
     recent_trades = [o for o in filled_orders 
-                     if datetime.fromisoformat(str(o.filled_at)) > last_7_days]
+                     if o.filled_at > last_7_days]  # <-- directly compare datetimes
     
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -491,3 +490,4 @@ st.caption(f"Last updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} IST | 
 if st.button("Refresh Now"):
     st.cache_data.clear()
     st.rerun()
+
